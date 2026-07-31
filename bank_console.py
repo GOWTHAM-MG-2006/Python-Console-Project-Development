@@ -27,3 +27,9 @@ def create_account(customer_name):
     acc_id += 1
     print("Account Created Successfully")
     return cur_id
+
+def get_account(acc_id):
+    if acc_id in accounts:
+        return accounts[acc_id]
+    else:
+        raise AccountNotFoundError
