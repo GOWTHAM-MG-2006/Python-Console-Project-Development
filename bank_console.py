@@ -33,3 +33,16 @@ def get_account(acc_id):
         return accounts[acc_id]
     else:
         raise AccountNotFoundError
+
+def deposit(acc_id,amount):
+    customer_acc=get_account(acc_id)
+    if( amount>0):
+        customer_acc.balance+=amount
+        return customer_acc.balance
+    else:
+        if(amount<0):
+            print("Amount Cannot Be Negative")
+        else:
+            print("Amount Cannot Be Zero")
+        return    #This returns None, not a problem for now(week-1), but should be resolved in Week-4
+    
