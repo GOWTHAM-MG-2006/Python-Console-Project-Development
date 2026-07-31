@@ -8,6 +8,7 @@ class Account:
     balance: float
 
 
+acc_id = 101
 accounts: dict[int, Account] = {}
 
 
@@ -17,3 +18,12 @@ class AccountNotFoundError(Exception):
 
 class InsufficientFundsError(Exception):
     pass
+
+
+def create_account(customer_name):
+    global acc_id
+    accounts[acc_id] = Account(acc_id, customer_name, 0.00)
+    cur_id = acc_id
+    acc_id += 1
+    print("Account Created Successfully")
+    return cur_id
