@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from email.policy import default
 
 
 @dataclass
@@ -91,31 +90,31 @@ while True:
             case 1: #Create
                 print("Enter Customer Name:")
                 name=input()
-                acc_id=create_account(name)
-                print("Account ID:",acc_id)
+                new_id=create_account(name)
+                print("Account ID:",new_id)
             case 2: #Deposit
                 print("Enter Account ID:")
-                acc_id=int(input())
+                user_id=int(input())
                 print("Enter Amount To Be Deposited:")
-                amount=int(input())
-                balance=deposit(acc_id,amount)
+                amount=float(input())
+                balance=deposit(user_id,amount)
                 print("Available Balance:",balance)
             case 3: #Withdraw
                 print("Enter Account ID:")
-                acc_id=int(input())
+                user_id=int(input())
                 print("Enter Amount To Be Withdrawn:")
-                amount=int(input())
-                balance=withdraw(acc_id,amount)
+                amount=float(input())
+                balance=withdraw(user_id,amount)
                 print("Available Balance:",balance)
             case 4: #Check Balance
                 print("Enter Account ID:")
-                acc_id=int(input())
-                balance=checkbalance(acc_id)
+                user_id=int(input())
+                balance=checkbalance(user_id)
                 print("Available Balance:",balance)
             case 5: #Close Account
                 print("Enter Account ID To Be Deleted:")
-                acc_id=int(input())
-                close_account(acc_id)
+                user_id=int(input())
+                close_account(user_id)
             case 6: #Exit
                 print("Thanks For Visiting JJ-Bank")
                 break
