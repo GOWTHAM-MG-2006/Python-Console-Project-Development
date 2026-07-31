@@ -84,9 +84,9 @@ while True:
     print("|         5. CLOSE ACCOUNT                    |")
     print("|         6. EXIT                             |")
     print("+---------------------------------------------+")
-    print("Enter Your Choice:")
-    ch=int(input())
     try:
+        print("Enter Your Choice:")
+        ch=int(input())
         match ch:
             case 1: #Create
                 print("Enter Customer Name:")
@@ -121,3 +121,9 @@ while True:
                 break
             case _:
                 print("Invalid Choice")
+    except AccountNotFoundError:
+        print("Account Not Found")
+    except InsufficientFundsError:
+        print("Insufficient Funds")
+    except ValueError:
+        print("Enter Valid Input")
