@@ -19,12 +19,17 @@ class AccountNotFoundError(Exception):
 class InsufficientFundsError(Exception):
     pass
 
+class NegativeAmount(Exception):
+    pass
+
+class ZeroAmount(Exception):
+    pass
 
 def amountcheck(amount):
     if amount < 0:
-        print("Amount Cannot Be Negative")
+        raise NegativeAmount
     elif amount == 0:
-        print("Amount Cannot Be Zero")
+        raise ZeroAmount
 
 
 def create_account(customer_name):
@@ -126,3 +131,7 @@ while True:
         print("Insufficient Funds")
     except ValueError:
         print("Enter Valid Input")
+    except NegativeAmount:
+        print("Amount Cannot Be Negative")
+    except ZeroAmount:
+        print("Amount Cannot Be Zero")
