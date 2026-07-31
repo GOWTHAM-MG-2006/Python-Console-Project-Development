@@ -20,6 +20,13 @@ class InsufficientFundsError(Exception):
     pass
 
 
+def amountcheck(amount):
+    if amount < 0:
+        print("Amount Cannot Be Negative")
+    elif amount == 0:
+        print("Amount Cannot Be Zero")
+
+
 def create_account(customer_name):
     global acc_id
     accounts[acc_id] = Account(acc_id, customer_name, 0.00)
@@ -28,21 +35,32 @@ def create_account(customer_name):
     print("Account Created Successfully")
     return cur_id
 
+
 def get_account(acc_id):
     if acc_id in accounts:
         return accounts[acc_id]
     else:
         raise AccountNotFoundError
 
-def deposit(acc_id,amount):
-    customer_acc=get_account(acc_id)
-    if( amount>0):
-        customer_acc.balance+=amount
+
+def deposit(acc_id, amount):
+    customer_acc = get_account(acc_id)
+    if amount > 0:
+        customer_acc.balance += amount
         return customer_acc.balance
     else:
-        if(amount<0):
-            print("Amount Cannot Be Negative")
+        amountcheck(amount)
+        return customer_acc.balance
+
+
+def withdraw(acc_id, amount):
+    customer_acc = get_account(acc_id)
+    if amount > 0 and amount <= customer_acc.balance:
+        customer_acc.balance -= amount
+        return customer_acc.balance
+    else:
+        if amount > customer_acc.balance:
+            raise InsufficientFundsError
         else:
-            print("Amount Cannot Be Zero")
-        return    #This returns None, not a problem for now(week-1), but should be resolved in Week-4
-    
+            amountcheck(amount)
+            return customer_acc.balance
