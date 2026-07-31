@@ -64,3 +64,8 @@ def withdraw(acc_id, amount):
         else:
             amountcheck(amount)
             return customer_acc.balance
+
+def checkbalance(acc_id):
+    customer_acc=get_account(acc_id)
+    return customer_acc.balance
+
