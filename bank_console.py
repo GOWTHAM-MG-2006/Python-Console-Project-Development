@@ -70,7 +70,7 @@ def checkbalance(acc_id):
     return customer_acc.balance
 
 def close_account(acc_id):
-    customer_acc=get_account(acc_id)
+    get_account(acc_id)
     del accounts[acc_id]
     print("Account Closed Successfully")
 
