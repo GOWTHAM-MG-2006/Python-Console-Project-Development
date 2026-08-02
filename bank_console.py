@@ -55,6 +55,8 @@ def deposit(acc_id, amount):
     customer_acc = get_account(acc_id)
     if amount > 0:
         customer_acc.balance += amount
+        current_Transaction=Transaction("deposit",amount)
+        customer_acc.transactions.append(current_Transaction)
         return customer_acc.balance
     else:
         amountcheck(amount)
