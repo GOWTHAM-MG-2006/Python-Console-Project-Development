@@ -30,6 +30,9 @@ class NegativeAmount(Exception):
 class ZeroAmount(Exception):
     pass
 
+class CustomerNotExist(Exception):
+    pass
+
 def amountcheck(amount):
     if amount < 0:
         raise NegativeAmount
@@ -52,6 +55,12 @@ def get_account(acc_id):
         return accounts[acc_id]
     else:
         raise AccountNotFoundError
+
+def find_accounts_by_customer(name):
+    if name in customer_index:
+        return customer_index[name]
+    else:
+        raise CustomerNotExist
 
 
 def deposit(acc_id, amount):
