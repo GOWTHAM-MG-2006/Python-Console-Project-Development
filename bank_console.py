@@ -1,4 +1,5 @@
 from dataclasses import dataclass,field
+from collections import defaultdict
 
 @dataclass
 class Transaction:
@@ -12,6 +13,7 @@ class Account:
     transactions: list[Transaction] = field(default_factory=list)
 
 acc_id = 101
+customer_index = defaultdict(list)
 accounts: dict[int, Account] = {}
 
 
@@ -39,6 +41,7 @@ def create_account(customer_name):
     global acc_id
     accounts[acc_id] = Account(acc_id, customer_name, 0.00)
     cur_id = acc_id
+    customer_index[customer_name].append(cur_id)
     acc_id += 1
     print("Account Created Successfully")
     return cur_id
