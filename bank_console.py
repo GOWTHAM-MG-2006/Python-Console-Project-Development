@@ -1,12 +1,15 @@
-from dataclasses import dataclass
+from dataclasses import dataclass,field
 
-
+@dataclass
+class Transaction:
+    operation: str
+    amount: float
 @dataclass
 class Account:
     id: int
     customer_name: str
     balance: float
-
+    transactions: list[Transaction] = field(default_factory=list)
 
 acc_id = 101
 accounts: dict[int, Account] = {}
