@@ -1,16 +1,20 @@
-from dataclasses import dataclass,field
+from dataclasses import dataclass, field
 from collections import defaultdict
+
 
 @dataclass
 class Transaction:
     operation: str
     amount: float
+
+
 @dataclass
 class Account:
     id: int
     customer_name: str
     balance: float
     transactions: list[Transaction] = field(default_factory=list)
+
 
 acc_id = 101
 customer_index = defaultdict(list)
@@ -24,14 +28,18 @@ class AccountNotFoundError(Exception):
 class InsufficientFundsError(Exception):
     pass
 
+
 class NegativeAmount(Exception):
     pass
+
 
 class ZeroAmount(Exception):
     pass
 
+
 class CustomerNotExist(Exception):
     pass
+
 
 def amountcheck(amount):
     if amount < 0:
@@ -56,39 +64,40 @@ def get_account(acc_id):
     else:
         raise AccountNotFoundError
 
+
 def find_accounts_by_customer(name):
     if name in customer_index:
         return customer_index[name]
     else:
         raise CustomerNotExist
 
-def transfer(from_id, to_id, amount):
-    from_acc=get_account(from_id)
-    to_acc=get_account(to_id)
-    amountcheck(amount)
-    if(from_acc.balance<amount):
-        raise InsufficientFundsError
-    source_transaction_history=from_acc.transactions.copy()
-    source_balance=from_acc.balance
-    target_transaction_history=to_acc.transactions.copy()
-    target_balance=to_acc.balance
-    try:
-        withdraw(from_id,amount)
-        deposit(to_id,amount)
-    except:
-        from_acc.balance=source_balance
-        from_acc.transactions=source_transaction_history
-        to_acc.balance=target_balance
-        to_acc.transactions=target_transaction_history
-        raise
 
+def transfer(from_id, to_id, amount):
+    from_acc = get_account(from_id)
+    to_acc = get_account(to_id)
+    amountcheck(amount)
+    if from_acc.balance < amount:
+        raise InsufficientFundsError
+    source_transaction_history = from_acc.transactions.copy()
+    source_balance = from_acc.balance
+    target_transaction_history = to_acc.transactions.copy()
+    target_balance = to_acc.balance
+    try:
+        withdraw(from_id, amount)
+        deposit(to_id, amount)
+    except:
+        from_acc.balance = source_balance
+        from_acc.transactions = source_transaction_history
+        to_acc.balance = target_balance
+        to_acc.transactions = target_transaction_history
+        raise
 
 
 def deposit(acc_id, amount):
     customer_acc = get_account(acc_id)
     if amount > 0:
         customer_acc.balance += amount
-        current_Transaction=Transaction("deposit",amount)
+        current_Transaction = Transaction("deposit", amount)
         customer_acc.transactions.append(current_Transaction)
         return customer_acc.balance
     else:
@@ -100,7 +109,7 @@ def withdraw(acc_id, amount):
     customer_acc = get_account(acc_id)
     if amount > 0 and amount <= customer_acc.balance:
         customer_acc.balance -= amount
-        current_Transaction=Transaction("withdraw",amount)
+        current_Transaction = Transaction("withdraw", amount)
         customer_acc.transactions.append(current_Transaction)
         return customer_acc.balance
     else:
@@ -110,15 +119,20 @@ def withdraw(acc_id, amount):
             amountcheck(amount)
             return customer_acc.balance
 
+
 def checkbalance(acc_id):
-    customer_acc=get_account(acc_id)
+    customer_acc = get_account(acc_id)
     return customer_acc.balance
 
+
 def close_account(acc_id):
-    get_account(acc_id)
-    customer_index[acc_id.name]
+    customer_account = get_account(acc_id)
+    customer_index[customer_account.customer_name].remove(acc_id)
+    if not customer_index[customer_account.customer_name]:
+        del customer_index[customer_account.customer_name]
     del accounts[acc_id]
     print("Account Closed Successfully")
+
 
 while True:
     print("+------------------ JJ-BANK ------------------+")
@@ -131,37 +145,37 @@ while True:
     print("+---------------------------------------------+")
     try:
         print("Enter Your Choice:")
-        ch=int(input())
+        ch = int(input())
         match ch:
-            case 1: #Create
+            case 1:  # Create
                 print("Enter Customer Name:")
-                name=input()
-                new_id=create_account(name)
-                print("Account ID:",new_id)
-            case 2: #Deposit
+                name = input()
+                new_id = create_account(name)
+                print("Account ID:", new_id)
+            case 2:  # Deposit
                 print("Enter Account ID:")
-                user_id=int(input())
+                user_id = int(input())
                 print("Enter Amount To Be Deposited:")
-                amount=float(input())
-                balance=deposit(user_id,amount)
-                print("Available Balance:",balance)
-            case 3: #Withdraw
+                amount = float(input())
+                balance = deposit(user_id, amount)
+                print("Available Balance:", balance)
+            case 3:  # Withdraw
                 print("Enter Account ID:")
-                user_id=int(input())
+                user_id = int(input())
                 print("Enter Amount To Be Withdrawn:")
-                amount=float(input())
-                balance=withdraw(user_id,amount)
-                print("Available Balance:",balance)
-            case 4: #Check Balance
+                amount = float(input())
+                balance = withdraw(user_id, amount)
+                print("Available Balance:", balance)
+            case 4:  # Check Balance
                 print("Enter Account ID:")
-                user_id=int(input())
-                balance=checkbalance(user_id)
-                print("Available Balance:",balance)
-            case 5: #Close Account
+                user_id = int(input())
+                balance = checkbalance(user_id)
+                print("Available Balance:", balance)
+            case 5:  # Close Account
                 print("Enter Account ID To Be Deleted:")
-                user_id=int(input())
+                user_id = int(input())
                 close_account(user_id)
-            case 6: #Exit
+            case 6:  # Exit
                 print("Thanks For Visiting JJ-Bank")
                 break
             case _:
