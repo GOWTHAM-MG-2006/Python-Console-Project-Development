@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from collections import defaultdict
 
 
-@dataclass
+@dataclass(frozen=True)
 class Transaction:
     operation: str
     amount: float
