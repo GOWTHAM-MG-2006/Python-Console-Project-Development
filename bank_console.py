@@ -40,6 +40,8 @@ class ZeroAmount(Exception):
 class CustomerNotExist(Exception):
     pass
 
+class NoTransactionHistoryFound(Exception):
+    pass
 
 def amountcheck(amount):
     if amount < 0:
@@ -71,7 +73,22 @@ def find_accounts_by_customer(name):
     else:
         raise CustomerNotExist
 
-
+def reverse_last_transaction(acc_id):
+    customer_acc=get_account(acc_id)
+    transaction_history=customer_acc.transactions
+    if (len(transaction_history)==0):
+        raise NoTransactionHistoryFound
+    last_transaction=transaction_history[-1]
+    if(last_transaction.operation=="withdraw"):
+        customer_acc.balance+=last_transaction.amount
+    else:
+        if(customer_acc.balance<last_transaction.amount):
+            raise InsufficientFundsError
+        customer_acc.balance-=last_transaction.amount
+    transaction_history.pop()
+    print(f"The Last Transaction {last_transaction.operation} of Amount {last_transaction.amount} Has Been Reversed Successfully")
+    return customer_acc.balance
+    
 def transfer(from_id, to_id, amount):
     from_acc = get_account(from_id)
     to_acc = get_account(to_id)
