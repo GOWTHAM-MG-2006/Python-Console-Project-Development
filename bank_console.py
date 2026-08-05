@@ -40,8 +40,10 @@ class ZeroAmount(Exception):
 class CustomerNotExist(Exception):
     pass
 
+
 class NoTransactionHistoryFound(Exception):
     pass
+
 
 def amountcheck(amount):
     if amount < 0:
@@ -73,22 +75,26 @@ def find_accounts_by_customer(name):
     else:
         raise CustomerNotExist
 
+
 def reverse_last_transaction(acc_id):
-    customer_acc=get_account(acc_id)
-    transaction_history=customer_acc.transactions
-    if (len(transaction_history)==0):
+    customer_acc = get_account(acc_id)
+    transaction_history = customer_acc.transactions
+    if len(transaction_history) == 0:
         raise NoTransactionHistoryFound
-    last_transaction=transaction_history[-1]
-    if(last_transaction.operation=="withdraw"):
-        customer_acc.balance+=last_transaction.amount
+    last_transaction = transaction_history[-1]
+    if last_transaction.operation == "withdraw":
+        customer_acc.balance += last_transaction.amount
     else:
-        if(customer_acc.balance<last_transaction.amount):
+        if customer_acc.balance < last_transaction.amount:
             raise InsufficientFundsError
-        customer_acc.balance-=last_transaction.amount
+        customer_acc.balance -= last_transaction.amount
     transaction_history.pop()
-    print(f"The Last Transaction {last_transaction.operation} of Amount {last_transaction.amount} Has Been Reversed Successfully")
+    print(
+        f"The Last Transaction {last_transaction.operation} of Amount {last_transaction.amount} Has Been Reversed Successfully"
+    )
     return customer_acc.balance
-    
+
+
 def transfer(from_id, to_id, amount):
     from_acc = get_account(from_id)
     to_acc = get_account(to_id)
@@ -157,8 +163,11 @@ while True:
     print("|         2. DEPOSIT                          |")
     print("|         3. WITHDRAW                         |")
     print("|         4. CHECK BALANCE                    |")
-    print("|         5. CLOSE ACCOUNT                    |")
-    print("|         6. EXIT                             |")
+    print("|         5. TRANSFER MONEY                   |")
+    print("|         6. REVERSE LAST TRANSACTION         |")
+    print("|         7. FIND ACCOUNTS BY CUSTOMER NAME   |")
+    print("|         8. CLOSE ACCOUNT                    |")
+    print("|         9. EXIT                             |")
     print("+---------------------------------------------+")
     try:
         print("Enter Your Choice:")
@@ -188,22 +197,48 @@ while True:
                 user_id = int(input())
                 balance = checkbalance(user_id)
                 print("Available Balance:", balance)
-            case 5:  # Close Account
+            case 5:  # TRANSFER MONEY
+                print("Enter Your Account ID:")
+                from_id = int(input())
+                print("Enter Receiver Account ID:")
+                to_id = int(input())
+                print("Enter Amount To Be Transferred:")
+                amount = float(input())
+                transfer(from_id, to_id, amount)
+                print("Amount Transferred Successfully")
+            case 6:  # REVERSE LAST TRANSACTION
+                print("Enter Account ID:")
+                customer_id = int(input())
+                updated_balance = reverse_last_transaction(customer_id)
+                print(
+                    f"Reversal of Last Transaction Successful And The Updated Balance Is: {updated_balance}"
+                )
+            case 7:  # FIND ACCOUNTS BY CUSTOMER NAME
+                print("Enter The Name of The Customer:")
+                customer_name = input()
+                account_list = find_accounts_by_customer(customer_name)
+                print(f"Accounts Held By The Customer Named {customer_name} Is:")
+                print(*account_list)
+            case 8:  # Close Account
                 print("Enter Account ID To Be Deleted:")
                 user_id = int(input())
                 close_account(user_id)
-            case 6:  # Exit
+            case 9:  # Exit
                 print("Thanks For Visiting JJ-Bank")
                 break
             case _:
                 print("Invalid Choice")
-    except AccountNotFoundError:
+    except AccountNotFoundError as e:
         print("Account Not Found")
-    except InsufficientFundsError:
+    except InsufficientFundsError as e:
         print("Insufficient Funds")
-    except ValueError:
+    except ValueError as e:
         print("Enter Valid Input")
-    except NegativeAmount:
+    except NegativeAmount as e:
         print("Amount Cannot Be Negative")
-    except ZeroAmount:
+    except ZeroAmount as e:
         print("Amount Cannot Be Zero")
+    except CustomerNotExist as e:
+        print("Customer Does Not Exist")
+    except NoTransactionHistoryFound as e:
+        print("No Transaction History Found")
