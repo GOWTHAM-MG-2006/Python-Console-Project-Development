@@ -62,6 +62,27 @@ def find_accounts_by_customer(name):
     else:
         raise CustomerNotExist
 
+def transfer(from_id, to_id, amount):
+    from_acc=get_account(from_id)
+    to_acc=get_account(to_id)
+    amountcheck(amount)
+    if(from_acc.balance<amount):
+        raise InsufficientFundsError
+    source_transaction_history=from_acc.transactions.copy()
+    source_balance=from_acc.balance
+    target_transaction_history=to_acc.transactions.copy()
+    target_balance=to_acc.balance
+    try:
+        withdraw(from_id,amount)
+        deposit(to_id,amount)
+    except:
+        from_acc.balance=source_balance
+        from_acc.transactions=source_transaction_history
+        to_acc.balance=target_balance
+        to_acc.transactions=target_transaction_history
+        raise
+
+
 
 def deposit(acc_id, amount):
     customer_acc = get_account(acc_id)
@@ -95,6 +116,7 @@ def checkbalance(acc_id):
 
 def close_account(acc_id):
     get_account(acc_id)
+    customer_index[acc_id.name]
     del accounts[acc_id]
     print("Account Closed Successfully")
 
